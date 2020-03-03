@@ -1,0 +1,19 @@
+<Storage>
+    <Box id="3">
+        <Item id="1" color="red"/>
+        <Item id="2" color="blue"/>
+        <Box id="4">
+            <Item id="7" color="white"/>
+            <Item id="8" color="red"/>
+            <Box id="5">
+                <Item id="10"/>
+            </Box>
+        </Box>
+    </Box>
+    <Box id="7">
+        <Box id="8">
+            <Item id="14" color="red"/>
+        </Box>
+    </Box>
+    <Item id="15" color="red"/>
+</Storage>
