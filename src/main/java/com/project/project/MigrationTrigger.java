@@ -10,7 +10,7 @@ import java.util.List;
 @Component
 public class MigrationTrigger {
 
-    public void setContainedIn(Box box, List<Integer> ids, List<Item> allItems) {
+    protected static void setContainedIn(Box box, List<Integer> ids, List<Item> allItems) {
         List<Box> boxes = box.getBoxes();
         List<Item> items = box.getItems();
         if (items != null) {
@@ -28,7 +28,7 @@ public class MigrationTrigger {
         }
     }
 
-    public List<com.project.project.entity.Box> init(Box box) {
+    protected static List<com.project.project.entity.Box> init(Box box) {
         List<com.project.project.entity.Box> all = new ArrayList<>();
         com.project.project.entity.Box entity = new com.project.project.entity.Box();
         entity.setId(box.getBoxId());
@@ -37,7 +37,7 @@ public class MigrationTrigger {
         return all;
     }
 
-    private void fillTheBoxContainer(Box input, List<com.project.project.entity.Box> all) {
+    private static void fillTheBoxContainer(Box input, List<com.project.project.entity.Box> all) {
         List<Box> boxes = input.getBoxes();
         if (boxes != null) {
             for (Box model : boxes) {

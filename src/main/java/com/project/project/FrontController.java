@@ -26,7 +26,7 @@ public class FrontController {
     private final BoxService boxService;
     private final ItemService itemService;
     private final NamedParameterJdbcTemplate template;
-    private static final Integer REQUEST_LENGTH_THRESHOLD = 25;
+    private static final int REQUEST_LENGTH_THRESHOLD = 25;
 
     public FrontController(BoxService boxService, ItemService itemService, NamedParameterJdbcTemplate template) {
         this.boxService = boxService;
@@ -45,7 +45,9 @@ public class FrontController {
         allBoxes.add(box);
         getAllBoxes(box, allBoxes);
         List<Item> items = itemService.getByBoxesAndColor(allBoxes, request.getColor());
-        List<Integer> responseIds = items.stream().map(Item::getId).collect(Collectors.toList());
+        List<Integer> responseIds = items.stream()
+                .map(Item::getId)
+                .collect(Collectors.toList());
         return new ResponseEntity<>(responseIds, HttpStatus.OK);
     }
 

@@ -3,10 +3,8 @@ package com.project.project;
 import com.project.project.model.Box;
 import com.project.project.model.Item;
 import com.project.project.model.Storage;
-import com.project.project.service.BoxService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -28,12 +26,18 @@ import java.util.Map;
 
 @SpringBootApplication
 public class ProjectApplication {
-    @Autowired
-    private NamedParameterJdbcTemplate jdbcTemplate;
-    private static MigrationTrigger trigger = new MigrationTrigger();
-    private static List<com.project.project.entity.Box> resultBoxes = new ArrayList<>();
-    private static List<Item> allItems = new ArrayList<>();
+
+    private final NamedParameterJdbcTemplate jdbcTemplate;
+
+    private static List<com.project.project.entity.Box> RESULT_BOXES = new ArrayList<>();
+
+    private static List<Item> ALL_ITEMS = new ArrayList<>();
+
     private static final Logger LOGGER = LoggerFactory.getLogger(ProjectApplication.class);
+
+    public ProjectApplication(NamedParameterJdbcTemplate jdbcTemplate) {
+        this.jdbcTemplate = jdbcTemplate;
+    }
 
     public static void main(String[] args) {
         SpringApplication app = new SpringApplication(ProjectApplication.class);
@@ -43,17 +47,17 @@ public class ProjectApplication {
         }
     }
 
-    public static boolean implementTransformation(String fileName) {
+    private static boolean implementTransformation(String fileName) {
         System.out.println("input fileName: " + fileName);
         Map<String, String> fileNames = new HashMap<>();
         fileNames.put("InputFile", "/files/InputFile.xml");
         fileNames.put("OneMoreFile", "/files/OneMoreFile.xml");
         if (fileNames.containsKey(fileName)) {
             String filePath = fileNames.get(fileName);
-            JAXBContext context = null;
-            Storage store = null;
+            JAXBContext context;
+            Storage store;
             URL resource = ProjectApplication.class.getResource(filePath);
-            File file = null;
+            File file;
             try {
                 file = Paths.get(resource.toURI()).toFile();
                 InputStream inStream = new FileInputStream(file);
@@ -72,8 +76,8 @@ public class ProjectApplication {
                 List<Box> boxes = store.getBoxes();
                 for (Box box : boxes) {
                     List<Integer> containedIds = new ArrayList<>();
-                    trigger.setContainedIn(box, containedIds, allItems);
-                    resultBoxes.addAll(trigger.init(box));
+                    MigrationTrigger.setContainedIn(box, containedIds, ALL_ITEMS);
+                    RESULT_BOXES.addAll(MigrationTrigger.init(box));
                 }
             }
         }
@@ -81,15 +85,15 @@ public class ProjectApplication {
     }
 
     @Bean
-    public CommandLineRunner run(BoxService boxService) throws Exception {
+    protected CommandLineRunner run() {
         return args -> {
-            for (com.project.project.entity.Box box : resultBoxes) {
+            for (com.project.project.entity.Box box : RESULT_BOXES) {
                 Map<String, Integer> params = new HashMap<>();
                 params.put("id", box.getId());
                 params.put("contIn", box.getContainedIn());
                 jdbcTemplate.update("insert into BOX(id, contained_in) values(:id,:contIn)", params);
             }
-            for (Item item : allItems) {
+            for (Item item : ALL_ITEMS) {
                 Map<String, Object> params = new HashMap<>();
                 params.put("id", item.getItemId());
                 params.put("contIn", item.getContainedIn());

@@ -12,7 +12,7 @@ public class Item {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     @JoinColumn(name = "CONTAINED_IN")
     private Box box;
 
@@ -41,5 +41,14 @@ public class Item {
 
     public void setColor(String color) {
         this.color = color;
+    }
+
+    @Override
+    public String toString() {
+        return "Item{"
+                + "id=" + id
+                + ", box=" + box
+                + ", color='" + color + '\''
+                + '}';
     }
 }

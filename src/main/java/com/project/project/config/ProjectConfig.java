@@ -14,8 +14,6 @@ import javax.sql.DataSource;
 @Configuration
 public class ProjectConfig {
 
-    private static DataSource dataSource;
-
     @Bean
     public DataSource dataSource() {
         return new EmbeddedDatabaseBuilder()
