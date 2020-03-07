@@ -44,6 +44,9 @@ public class ProjectApplication {
         String fileName = args[0];
         if (implementTransformation(fileName)) {
             app.run(args);
+        } else {
+            LOGGER.info("No info provided for the application");
+            app.run(args);
         }
     }
 

@@ -33,8 +33,9 @@ public class Box {
 
     @Override
     public String toString() {
-        return "Box{" + "id=" + id
-                + ", containedIn=" + containedIn
-                + '}';
+        return new StringBuilder()
+                .append("{ com.project.project.entity.BOX " + getId())
+                .append("}")
+                .toString();
     }
 }

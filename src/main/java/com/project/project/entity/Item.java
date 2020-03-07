@@ -6,7 +6,8 @@ import javax.persistence.*;
 @Table(name = "ITEM")
 public class Item {
 
-    public Item(){}
+    public Item() {
+    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -45,10 +46,9 @@ public class Item {
 
     @Override
     public String toString() {
-        return "Item{"
-                + "id=" + id
-                + ", box=" + box
-                + ", color='" + color + '\''
-                + '}';
+        return new StringBuilder()
+                .append("{ com.project.project.entity.ITEM " + getId())
+                .append("}")
+                .toString();
     }
 }
