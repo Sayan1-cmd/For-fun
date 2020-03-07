@@ -1,8 +1,13 @@
 package com.project.project;
 
+import com.project.project.entity.ApplicationUser;
 import com.project.project.model.Box;
 import com.project.project.model.Item;
 import com.project.project.model.Storage;
+import com.project.project.service.ApplicationUserService;
+import com.project.project.service.BoxService;
+import com.project.project.service.ItemService;
+import com.project.project.service.UserServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
@@ -10,6 +15,9 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.NoOpPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Unmarshaller;
@@ -19,10 +27,7 @@ import java.io.InputStream;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @SpringBootApplication
 public class ProjectApplication {
@@ -88,7 +93,12 @@ public class ProjectApplication {
     }
 
     @Bean
-    protected CommandLineRunner run() {
+    public PasswordEncoder encode(){
+        return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    protected CommandLineRunner run(ApplicationUserService service, PasswordEncoder encoder) {
         return args -> {
             for (com.project.project.entity.Box box : RESULT_BOXES) {
                 Map<String, Integer> params = new HashMap<>();
@@ -103,6 +113,13 @@ public class ProjectApplication {
                 params.put("color", item.getItemColor());
                 jdbcTemplate.update("insert into ITEM(id, contained_in, color) values(:id,:contIn, :color)", params);
             }
+            ApplicationUser user = new ApplicationUser();
+            user.setUserName("admin");
+            String password = encoder.encode("password");
+            user.setPassword(password);
+            service.saveUser(user);
         };
     }
+
+
 }

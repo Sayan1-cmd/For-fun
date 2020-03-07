@@ -53,5 +53,10 @@ public class FrontController {
         return new ResponseEntity<>(responseIds, HttpStatus.OK);
     }
 
+    @GetMapping("/rio")
+    public ResponseEntity<String> get() {
+        return new ResponseEntity<>("Hello!", HttpStatus.OK);
+    }
+
 
 }

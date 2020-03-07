@@ -13,9 +13,12 @@ public class Item {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.DETACH)
     @JoinColumn(name = "CONTAINED_IN")
     private Box box;
+
+    @Column(name = "CONTAINED_IN", insertable = false, updatable = false)
+    private int refBoxId;
 
     @Column(name = "COLOR")
     private String color;
@@ -42,6 +45,14 @@ public class Item {
 
     public void setColor(String color) {
         this.color = color;
+    }
+
+    public int getRefBoxId() {
+        return refBoxId;
+    }
+
+    public void setRefBoxId(int refBoxId) {
+        this.refBoxId = refBoxId;
     }
 
     @Override

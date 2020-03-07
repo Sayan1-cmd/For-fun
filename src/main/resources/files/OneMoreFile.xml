@@ -15,5 +15,16 @@
             <Item id="14" color="red"/>
         </Box>
     </Box>
-    <Item id="15" color="red"/>
+    <Box id="9">
+        <Box id="23">
+            <Item id="19" color="red"/>
+            <Item id="20" color="yellow"/>
+            <Box id="11">
+                <Item id="21" color="red"/>
+                <Item id="26" color="blue"/>
+                <Item id="24" color="green"/>
+            </Box>
+        </Box>
+    </Box>
+    <Item id="15" color="brown"/>
 </Storage>
