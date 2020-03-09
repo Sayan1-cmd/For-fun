@@ -1,4 +1,4 @@
-package com.project.project;
+package com.project.project.controllers;
 
 import com.project.project.entity.Box;
 import com.project.project.entity.Item;

@@ -1,15 +1,19 @@
 package com.project.project.entity;
 
+import org.hibernate.annotations.GenericGenerator;
+
 import javax.persistence.*;
 
 @Entity
 @Table(name = "BOX")
 public class Box {
 
-    public Box(){}
+    public Box() {
+    }
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "Sequence")
+    @GenericGenerator(name = "Sequence", strategy = "com.project.project.entity.Sequence")
     private Integer id;
 
     @Column(name = "CONTAINED_IN")
@@ -33,9 +37,9 @@ public class Box {
 
     @Override
     public String toString() {
-        return new StringBuilder()
-                .append("{ com.project.project.entity.BOX " + getId())
-                .append("}")
-                .toString();
+        return "Box{" +
+                "id=" + id +
+                ", containedIn=" + containedIn +
+                '}';
     }
 }

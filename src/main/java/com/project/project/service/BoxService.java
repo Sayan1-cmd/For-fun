@@ -26,7 +26,7 @@ public class BoxService {
     }
 
     public Box getBoxById(Integer boxId) {
-        LOGGER.info("getBoxById: boxId=[{}]", boxId);
+        LOGGER.debug("getBoxById: boxId=[{}]", boxId);
         return boxRepository.findById(boxId).orElseThrow(() -> new RuntimeException(String.format("Box with the id=%s was not found in the DataBase", boxId)));
     }
 }

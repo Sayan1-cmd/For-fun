@@ -1,5 +1,7 @@
 package com.project.project.entity;
 
+import org.hibernate.annotations.GenericGenerator;
+
 import javax.persistence.*;
 
 @Entity
@@ -10,7 +12,8 @@ public class Item {
     }
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "Sequence")
+    @GenericGenerator(name = "Sequence", strategy = "com.project.project.entity.Sequence")
     private Integer id;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.DETACH)
@@ -57,9 +60,11 @@ public class Item {
 
     @Override
     public String toString() {
-        return new StringBuilder()
-                .append("{ com.project.project.entity.ITEM " + getId())
-                .append("}")
-                .toString();
+        return "Item{"
+                + "id=" + id
+                + ", box=" + box
+                + ", refBoxId=" + refBoxId
+                + ", color='" + color + '\''
+                + '}';
     }
 }

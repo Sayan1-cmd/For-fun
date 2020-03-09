@@ -25,11 +25,8 @@ import java.util.Map;
 public class MigrationTrigger {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MigrationTrigger.class);
-    private static List<com.project.project.entity.Box> RESULT_BOXES = new ArrayList<>();
-    private static List<Item> ALL_ITEMS = new ArrayList<>();
 
-
-    protected static XMLParsingResult prepareData(String fileName) {
+    protected XMLParsingResult prepareData(String fileName) {
         Map<String, String> fileNames = new HashMap<>();
         List<com.project.project.entity.Box> boxList = new ArrayList<>();
         List<Item> itemList = new ArrayList<>();
@@ -44,7 +41,7 @@ public class MigrationTrigger {
             try {
                 file = Paths.get(resource.toURI()).toFile();
                 InputStream inStream = new FileInputStream(file);
-                System.out.println("success");
+                LOGGER.info("XML File found in the resource root");
                 context = JAXBContext.newInstance(Storage.class);
                 Unmarshaller unmarshaller = context.createUnmarshaller();
                 store = (Storage) unmarshaller.unmarshal(inStream);
@@ -59,15 +56,15 @@ public class MigrationTrigger {
                 List<Box> boxes = store.getBoxes();
                 for (Box box : boxes) {
                     List<Integer> containedIds = new ArrayList<>();
-                    MigrationTrigger.setContainedIn(box, containedIds, ALL_ITEMS);
-                    boxList.addAll(MigrationTrigger.init(box));
+                    setContainedIn(box, containedIds, itemList);
+                    boxList.addAll(init(box));
                 }
             }
         }
         return new XMLParsingResult(boxList, itemList);
     }
 
-    protected static void setContainedIn(Box box, List<Integer> ids, List<Item> allItems) {
+    protected void setContainedIn(Box box, List<Integer> ids, List<Item> allItems) {
         List<Box> boxes = box.getBoxes();
         List<Item> items = box.getItems();
         if (items != null) {
@@ -85,7 +82,7 @@ public class MigrationTrigger {
         }
     }
 
-    protected static List<com.project.project.entity.Box> init(Box box) {
+    protected List<com.project.project.entity.Box> init(Box box) {
         List<com.project.project.entity.Box> all = new ArrayList<>();
         com.project.project.entity.Box entity = new com.project.project.entity.Box();
         entity.setId(box.getBoxId());
@@ -94,7 +91,7 @@ public class MigrationTrigger {
         return all;
     }
 
-    private static void fillTheBoxContainer(Box input, List<com.project.project.entity.Box> all) {
+    private void fillTheBoxContainer(Box input, List<com.project.project.entity.Box> all) {
         List<Box> boxes = input.getBoxes();
         if (boxes != null) {
             for (Box model : boxes) {

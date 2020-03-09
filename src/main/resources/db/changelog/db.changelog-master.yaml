@@ -1,0 +1,7 @@
+databaseChangeLog:
+  - include:
+      file: db\\changelog\\migrations\\box_table.sql
+  - include:
+      file: db\\changelog\\migrations\\item_table.sql
+  - include:
+      file: db\\changelog\\migrations\\user_table.sql
